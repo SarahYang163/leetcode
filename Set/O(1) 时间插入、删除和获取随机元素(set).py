@@ -1,5 +1,5 @@
 import random
-
+#https://leetcode.cn/problems/insert-delete-getrandom-o1/
 
 class RandomizedSet:
     def __init__(self):
