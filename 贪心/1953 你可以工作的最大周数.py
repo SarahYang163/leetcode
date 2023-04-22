@@ -19,9 +19,18 @@ class Solution:
             last_pop_num = now_pop_num
         return res
 
+    # 不超时算法
+    def numberOfWeeks1(self, milestones: List[int]) -> int:
+        sumNum, maxNum = 0, 0
+        for a in milestones:
+            sumNum += a
+            maxNum = max(maxNum, a)
+        if maxNum > sumNum / 2:
+            return (sumNum - maxNum) * 2 + 1
+        return sumNum
+
 
 if __name__ == '__main__':
-    # arr = [3, 4, 12, 3, 1, 3, 4, 6, 8, 4, 3, 9]
     arr = [723, 651, 790, 980, 51, 242, 386, 581, 225, 970, 341, 239, 425, 486, 498, 717, 521, 12, 177, 49, 480, 749,
            161, 714, 344, 758, 858, 913, 216, 132, 851, 420, 945, 2, 45, 140, 647, 774, 786, 129, 514, 336, 602, 485,
            130, 939, 271, 546, 56, 943, 118, 603, 926, 296, 929, 696, 724, 510, 965, 614, 342, 211, 960, 572, 897, 141,
@@ -42,3 +51,4 @@ if __name__ == '__main__':
     # heapq.heapify(arr*(-1))
     # pq.put(3)
     print(arr)
+    print(f"move", arr[0], "to", arr[1])
