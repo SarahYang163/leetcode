@@ -1,7 +1,8 @@
 import collections
 from collections import deque
 from typing import List
-
+import bintrees
+import sortedcontainers
 
 # 时间O(n)求出在一个数组中，寻找下一个更大的值和前一个更大的值
 # [2,3,5,1,6]
@@ -30,6 +31,7 @@ class Solution:
                 helpStack[-1][0] = helpStack[-1][0] + [i]  # 当前索引加到栈顶的索引
                 res[i][1] = res[helpStack[-1][0][0]][1]  # 当前的元素的前一个最大值等于栈顶元素最大值
             else:
+                bintrees
                 helpStack.append([[i], arr[i]])
         return res
 

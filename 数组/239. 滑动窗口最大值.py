@@ -1,6 +1,8 @@
 # https://leetcode.cn/problems/sliding-window-maximum/
 import collections
 from typing import List
+
+
 # 输入: nums = [1,3,-1,-3,5,3,6,7], 和 k = 3
 # 输出: [3,3,5,5,6,7]
 #
@@ -18,27 +20,41 @@ from typing import List
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         res = []
-        if k > len(nums):
-            return res
+        # if k > len(nums):
+        #     return res
         dq = collections.deque()  # 放的是索引
-        l, r = 0, 0
-        while r < k - 1:#前k-1个数只用维护栈内元素，按照从左到右从大到小排列，当前元素大于最右边的元素，依次弹出栈，知道遇到比他大的然后当前元素入栈，不用维护res和l
-            while len(dq) != 0 and nums[dq[-1]] < nums[r]:
-                dq.pop()
-            dq.append(r)
-            r += 1
-        while r < len(nums):#窗口开始形成，要开始维护res辣，并且l、r指针每次都要加1，当前元素判断入栈之后，要判断最左边的元素还在有效期没（通过l、r判断滴），过期就弹出去，然后res去最左边也就是最大的元素
-            while len(dq) != 0 and nums[dq[-1]] < nums[r]:
-                dq.pop()
-            dq.append(r)
-            while dq[0] < l or dq[0] > r:
-                dq.popleft()
-            res.append(nums[dq[0]])
-            r += 1
-            l += 1
+        # l, r = 0, 0
+        # while r < k - 1:  # 前k-1个数只用维护栈内元素，按照从左到右从大到小排列，当前元素大于最右边的元素，依次弹出栈，知道遇到比他大的然后当前元素入栈，不用维护res和l
+        #     while len(dq) != 0 and nums[dq[-1]] < nums[r]:
+        #         dq.pop()
+        #     dq.append(r)
+        #     r += 1
+        # while r < len(
+        #         nums):  # 窗口开始形成，要开始维护res辣，并且l、r指针每次都要加1，当前元素判断入栈之后，要判断最左边的元素还在有效期没（通过l、r判断滴），过期就弹出去，然后res去最左边也就是最大的元素
+        #     while len(dq) != 0 and nums[dq[-1]] < nums[r]:
+        #         dq.pop()
+        #     dq.append(r)
+        #     while dq[0] < l or dq[0] > r:
+        #         dq.popleft()
+        #     res.append(nums[dq[0]])
+        #     r += 1
+        #     l += 1
+        # return res
+        for r in range(len(nums)):
+            if r >= k - 1:
+                while len(dq) != 0 and dq[0] < r + 1 - k:
+                    dq.popleft()
+                while len(dq) != 0 and nums[dq[-1]] < nums[r]:
+                    dq.pop()
+                dq.append(r)
+                res.append(nums[dq[0]])
+            else:
+                while len(dq) != 0 and nums[dq[-1]] < nums[r]:
+                    dq.pop()
+                dq.append(r)
         return res
 
 
 if __name__ == '__main__':
     res = Solution()
-    print(res.maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3))
+    print(res.maxSlidingWindow([1], 1))
