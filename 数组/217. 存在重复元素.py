@@ -13,5 +13,6 @@ class Solution:
             if last_num == nums[i]:
                 return True
             last_num = nums[i]
+
         return False
 
