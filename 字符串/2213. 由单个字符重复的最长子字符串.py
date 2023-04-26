@@ -33,4 +33,6 @@ class Solution:
 
 if __name__ == '__main__':
     res = Solution()
-    print(res.longestRepeating("abazzz", "zz", [2, 1]))
+    # print(res.longestRepeating("abazzz", "zz", [2, 1]))
+    # a=[1,2,3]
+    # a.remove(4)
