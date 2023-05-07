@@ -27,23 +27,40 @@ class Solution:
         return self.res
 
     def combinationSum4(self, candidates: List[int], target: int) -> int:
+        #此dfs做法超时
+        # self.res = 0
+        # candidates.sort()
+        # def process(candidates: List[int], target: int, res_tmp: List):
+        #     if target == 0:
+        #         self.res += 1
+        #         return
+        #     for i in range(0, len(candidates)):
+        #         if target - candidates[i] < 0:
+        #             break
+        #         process(candidates, target - candidates[i], res_tmp + [candidates[i]])
+        #
+        # process(candidates, target, [])
+        #
+        # return self.res
+        # dp = [0 for i in range(target + 1)]
+        # dp[0] = 1
+        # for i in range(target + 1):
+        #     for candidate in candidates:
+        #         if candidate <= i:
+        #             dp[i] += dp[i - candidate]
+        # return dp[target]
 
-        self.res = 0
-        candidates.sort()
-        def process(candidates: List[int], target: int, res_tmp: List):
-            if target == 0:
-                self.res += 1
-                return
-            for i in range(0, len(candidates)):
-                if target - candidates[i] < 0:
-                    break
-                process(candidates, target - candidates[i], res_tmp + [candidates[i]])
-
-        process(candidates, target, [])
-
-        return self.res
+        #背包解决
+        dp = [0 for i in range(target + 1)]
+        dp[0] = 1
+        for i in range(target + 1):
+            for j in range(len(candidates) - 1, -1, -1):
+                if candidates[j] <= i:
+                    dp[i] += dp[i - candidates[j]]
+        print(dp)
+        return dp[target]
 
 
 if __name__ == '__main__':
     res = Solution()
-    print(res.combinationSum4([4, 2, 1], 30))
+    print(res.combinationSum4([1, 2, 3], 3))
