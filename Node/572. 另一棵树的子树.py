@@ -12,14 +12,14 @@ class TreeNode:
 
 # 解法一：两个递归
 # class Solution:
-#     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+#     def isSubtree(self, root: Optional[Node], subRoot: Optional[Node]) -> bool:
 #         if root is None or subRoot is None:
 #             if root is None and subRoot is None:
 #                 return True
 #             else:
 #                 return False
 #
-#         def troughroot(root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+#         def troughroot(root: Optional[Node], subRoot: Optional[Node]) -> bool:
 #             if root is None or subRoot is None:
 #                 if root is None and subRoot is None:
 #                     return True
