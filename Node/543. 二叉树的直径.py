@@ -19,10 +19,10 @@ class ReturnData:
 
 class Solution:
     # 利用每个子树的长度
-    # def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+    # def diameterOfBinaryTree(self, root: Optional[Node]) -> int:
     #     self.res = -sys.maxsize - 1
     #
-    #     def process(root: Optional[TreeNode]) -> int:
+    #     def process(root: Optional[Node]) -> int:
     #         if root is None:
     #             return 0
     #         leftSize = process(root.left)

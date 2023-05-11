@@ -13,7 +13,7 @@ class TreeNode:
 class Solution:
     res = 0
 
-    # def countNodes(self, root: Optional[TreeNode]) -> int:
+    # def countNodes(self, root: Optional[Node]) -> int:
     #     return self.process(root)
 
     def countNodes(self, root: Optional[TreeNode]) -> int:

@@ -7,34 +7,34 @@ class Node:
 
 # 完全二叉树定义：完全二叉树是每一层（除最后一层外）都是完全填充（即，节点数达到最大，第 n 层有 2n-1 个节点）的，并且所有的节点都尽可能地集中在左侧
 #java实现
-    # public class TreeNode {
+    # public class Node {
     #     int val;
-    #     TreeNode left;
-    #     TreeNode right;
+    #     Node left;
+    #     Node right;
     #
-    #     TreeNode() {
+    #     Node() {
     #     }
     #
-    #     TreeNode(int val) {
+    #     Node(int val) {
     #         this.val = val;
     #     }
     #
-    #     TreeNode(int val, TreeNode left, TreeNode right) {
+    #     Node(int val, Node left, Node right) {
     #         this.val = val;
     #         this.left = left;
     #         this.right = right;
     #     }
     # }
     #
-    # public boolean isCompleteTree (TreeNode head) {
+    # public boolean isCompleteTree (Node head) {
     #     // write code here
-    #     Queue<TreeNode> queue = new LinkedList<>();
+    #     Queue<Node> queue = new LinkedList<>();
     #     boolean leaf = false;
     #     queue.add(head);
     #     while (queue.size() != 0) {
-    #         TreeNode node = queue.poll();
-    #         TreeNode l = node.left;
-    #         TreeNode r = node.right;
+    #         Node node = queue.poll();
+    #         Node l = node.left;
+    #         Node r = node.right;
     #         if ((leaf && (l != null || r != null)) || (r != null) && (l == null)) {
     #             return false;
     #         }
