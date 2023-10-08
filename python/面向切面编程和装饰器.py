@@ -31,4 +31,4 @@ def dou_num(count):
 
 
 if __name__ == '__main__':
-    print(dou_num(100))
+    print(dou_num(10))

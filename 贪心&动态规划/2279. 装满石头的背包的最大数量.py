@@ -17,6 +17,7 @@ class Solution:
         return count
 
 
+
 if __name__ == '__main__':
     res = Solution()
     print(res.maximumBags([10, 2, 2], [2, 2, 0], 100))

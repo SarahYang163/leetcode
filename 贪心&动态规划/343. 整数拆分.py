@@ -11,3 +11,7 @@ class Solution:
             for j in range(i, n + 1):  # target
                 dp[j] = max(dp[j], dp[j - i] * i, (j - i) * i)
         return dp[n]
+
+if __name__ == '__main__':
+    res = Solution()
+    print(res.integerBreak(4))

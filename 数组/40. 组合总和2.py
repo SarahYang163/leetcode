@@ -22,7 +22,7 @@ class Solution:
                 return
 
             for i in range(index, len(candidates)):
-                if i > 0 and i>index and candidates[i] == candidates[i - 1]:
+                if i > 0 and i > index and candidates[i] == candidates[i - 1]:
                     continue
                 if target - candidates[i] < 0:
                     break
@@ -30,6 +30,19 @@ class Solution:
 
         process(candidates, target, 0, [])
         return self.res
+
+    # 0/1背包
+    #外循环nums,内循环target,target倒序且target>=nums[i]
+    def combinationSum3(self, candidates: List[int], target: int) -> List[List[int]]:
+        dp = [[] for _ in range(target + 1)]
+        dp[0] = [[]]
+        candidates.sort()
+        for candidate in candidates:
+            for i in range(target, candidate - 1, -1):
+                for a in dp[i - candidate]:
+                    if [candidate] + a not in dp[i]:
+                        dp[i].append([candidate] + a)
+        return dp[target]
 
 
 if __name__ == '__main__':

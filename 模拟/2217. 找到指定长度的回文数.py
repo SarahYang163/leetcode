@@ -19,6 +19,6 @@ class Solution:
 
 
 if __name__ == '__main__':
-    # res = Solution()
-    # print(res.kthPalindrome([1, 2, 3, 4, 5, 90], 3))
+    res = Solution()
+    print(res.kthPalindrome([1, 2, 3, 4, 5, 90], 3))
     print([[0,0]] * 3)

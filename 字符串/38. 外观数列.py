@@ -45,4 +45,4 @@ class Solution:
 
 if __name__ == '__main__':
     res = Solution()
-    print(res.countAndSay(30))
+    print(res.countAndSay(10))

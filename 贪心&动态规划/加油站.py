@@ -4,12 +4,8 @@ from typing import List
 
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
-        sum_gas = 0
-        sum_cost = 0
-        for g in gas:
-            sum_gas += g
-        for c in cost:
-            sum_cost += c
+        sum_gas = sum(gas)
+        sum_cost = sum(cost)
         if sum_gas < sum_cost:
             return -1
         start = 0
@@ -24,4 +20,7 @@ class Solution:
 
 if __name__ == '__main__':
     res = Solution()
-    print(res.canCompleteCircuit([4,3,1,2,7,4], [1,2,7,3,2,5]))
+    print(res.canCompleteCircuit([4, 3, 1, 2, 7, 4], [1, 2, 7, 3, 2, 5]))
+    a = [1, 3]
+    b = [4, 5]
+    print(a + b)

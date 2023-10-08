@@ -42,4 +42,4 @@ class Solution:
 
 if __name__ == '__main__':
     res = Solution()
-    print(res.compress(["a", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"]))
+    print(res.compress(["a", "b", "b", "b", "b", "c","b", "b", "b", "b", "b", "b", "b", "b"]))

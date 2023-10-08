@@ -12,7 +12,7 @@ class Node:
 
 # 修改自中序遍历非递归版本
 def sbt(head: Node) -> bool:
-    stack, res = [], []
+    stack = []
     lastNodeVal = -sys.maxsize - 1
     if head is not None:
         while head is not None or len(stack) != 0:

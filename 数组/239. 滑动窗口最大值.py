@@ -30,7 +30,7 @@ class Solution:
         #     dq.append(r)
         #     r += 1
         # while r < len(
-        #         nums):  # 窗口开始形成，要开始维护res辣，并且l、r指针每次都要加1，当前元素判断入栈之后，要判断最左边的元素还在有效期没（通过l、r判断滴），过期就弹出去，然后res去最左边也就是最大的元素
+        # nums):  # 窗口开始形成，要开始维护res辣，并且l、r指针每次都要加1，当前元素判断入栈之后，要判断最左边的元素还在有效期没（通过l、r判断滴），过期就弹出去，然后res去最左边也就是最大的元素
         #     while len(dq) != 0 and nums[dq[-1]] < nums[r]:
         #         dq.pop()
         #     dq.append(r)
@@ -56,5 +56,9 @@ class Solution:
 
 
 if __name__ == '__main__':
-    res = Solution()
-    print(res.maxSlidingWindow([1], 1))
+    # res = Solution()
+    # print(res.maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3))
+    a = [3, 5, 7, 4, 22, 1, 5, 6, 77, 5, 3, 2, 1]
+    apple = sorted(collections.Counter(a).items(), key=lambda x: -x[1])
+    print(apple)
+    print(apple[-1])
