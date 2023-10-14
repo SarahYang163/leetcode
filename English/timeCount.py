@@ -3,15 +3,7 @@ import time
 
 import sqlalchemy
 
-mysql_setting = {
-    'host': 'localhost',
-    'port': 3306,
-    'user': 'root',
-    'passwd': 'root',
-    # 数据库名称
-    'db': 'test',
-    'charset': 'utf8'
-}
+from English.EnglishLearnAndReview.constants import mysql_setting
 
 
 class Stopwatch:
@@ -79,9 +71,9 @@ while True:
         engine = sqlalchemy.create_engine("mysql+pymysql://{user}:{passwd}@{host}:{port}/{db}".format(**mysql_setting),
                                           max_overflow=5)
         study_time = stopwatch.display_time()
-        sql0 = "INSERT INTO StudyRecord (study_time) VALUES ({}) ".format(study_time)
+        sql = "INSERT INTO StudyRecord (study_time) VALUES ({}) ".format(study_time)
         with engine.begin() as conn:
-            conn.execute(sqlalchemy.text(sql0))
+            conn.execute(sqlalchemy.text(sql))
         print("经过时间:", study_time)
         break
     else:
