@@ -5,14 +5,13 @@ import sys
 import threading
 import time
 from bs4 import BeautifulSoup
-
-import pyttsx4
+import datetime
 import requests
 import sqlalchemy
-import translate
 import pygame
 
-soup_context = [["basic", "word-exp"], ["webPhrase", "mcols-layout"], ["blng_sents_part dict-module", "mcols-layout"]]
+soup_context = [["trans-container", "trans-list"]]
+# soup_context = [["basic", "word-exp"], ["webPhrase", "mcols-layout"], ["blng_sents_part dict-module", "mcols-layout"]]
 mysql_setting = {
     'host': 'localhost',
     'port': 3306,
@@ -31,7 +30,7 @@ def displayTranslator(context, soup_translate_content):
             for element in elements:
                 print(element.text)
     except Exception as e:
-        print("Error:", str(e))
+        print("displayTranslator Error: ", str(e))
 
 
 def get_word_probability(score):
@@ -47,17 +46,16 @@ engine = sqlalchemy.create_engine("mysql+pymysql://{user}:{passwd}@{host}:{port}
                                   max_overflow=5)
 
 
-def choose_word():
-    # 查出所有的记录
-    results = engine.connect().exec_driver_sql(
-        "select English,Chinese,score,id,frequency,table_name  from AllEnglishKnowledge A where A.table_name != 'sentence' ")
-    # "select English,Chinese,score,id,frequency from AllEnglishKnowledge A where A.table_name= 'sentence' ")
-    # 将记录格式为字典
-    data = [dict(zip(results.keys(), result)) for result in results]
-    # 计算概率
-    probabilities = [get_word_probability(word["score"]) for word in data]
+def choose_word(data, probabilities):
     # 根据概率选择单词
-    chosen_word = random.choices(data, probabilities)[0]
+    chosen_word_id = random.choices(data, probabilities)[0]["id"]
+    chosen_words = engine.connect().exec_driver_sql("""
+    select English,Chinese,score,id,frequency,table_name 
+    from AllEnglishKnowledge 
+    where id ={} 
+    """.format(chosen_word_id))
+    chosen_word = [dict(zip(chosen_words.keys(), chosen_word)) for chosen_word in chosen_words][0]
+
     # 展示以及交互
     # question = chosen_word["Chinese"]
 
@@ -80,7 +78,7 @@ def choose_word():
             requests.get("https://dict.youdao.com/result", params={"word": chosen_word["English"], "lang": "en"}).text,
             'lxml')
         question = soup_translate_content.find(class_="word-exp").text
-    randomInt = random.randint(0, 1)
+    # randomInt = random.randint(0, 1)
     # 现在所有的单词句子都可以翻译了，不用这一段代码了
     # if response:
     #     question = response[0]["paraphrase"]
@@ -90,18 +88,26 @@ def choose_word():
     #     # translator = translate.Translator(from_lang="English", to_lang="chinese")
     #     question = chosen_word["Chinese"]
     answer = chosen_word["English"]
-    print(chosen_word["id"], question if randomInt == 1 else answer)
+    # print(datetime.datetime.now(),"任意键之前")
+    print(chosen_word["id"], question)
+    # if randomInt == 1 else answer)
     key = input("按下任意键继续...:")
+    # print(datetime.datetime.now(),"任意键之后")
+
     if key == "s":
         engine.dispose()
         sys.exit()
-    print("答案：", answer if randomInt == 1 else question)
+    print("答案：", answer)
+    # if randomInt == 1 else question)
     if chosen_word["table_name"] != "sentence":
         displayTranslator(soup_context, soup_translate_content)
+    # print(datetime.datetime.now(),"chosen_word结束")
     return chosen_word
 
 
 def pronunciation():
+    # print(datetime.datetime.now(),"发音开始")
+
     # time.sleep(2)
     # pronunciationEngine = pyttsx4.init()
     # pronunciationEngine.setProperty('rate', 250)
@@ -111,7 +117,7 @@ def pronunciation():
     #                          params={"word": chosen_word["English"]})).content
     response = requests.get(
         'https://dict.youdao.com/dictvoice',
-        params={"type": 1, "audio": chosen_word["English"]}).content  # 替换为实际的音频请求地址
+        params={"type": 0, "audio": chosen_word["English"]}).content  # 替换为实际的音频请求地址
 
     # 保存音频文件到临时文件
     audio_file = "temp.mp3"  # 临时文件名
@@ -134,35 +140,72 @@ def pronunciation():
     # 清除临时文件
     pygame.mixer.music.stop()
     pygame.quit()
+    # print(datetime.datetime.now(),"发音结束")
 
 
 def display():
+    # print(datetime.datetime.now(),"展示开始")
     score = input("答案正确请输入1，答案错误请输入0:")
-    sql1 = "update  AllEnglishKnowledge set score ={}-1 , frequency={}+1 where id ={}".format(chosen_word["score"],
-                                                                                              chosen_word[
-                                                                                                  "frequency"],
-                                                                                              chosen_word["id"]
-                                                                                              )
-    sql0 = "update  AllEnglishKnowledge set score ={}+1 , frequency={}+1 where id ={}".format(chosen_word["score"],
-                                                                                              chosen_word[
-                                                                                                  "frequency"],
-                                                                                              chosen_word["id"])
+    sql1 = """
+    update  AllEnglishKnowledge 
+    set score ={}-1 , frequency={}+1 
+    where id ={}
+    """.format(chosen_word["score"],
+               chosen_word[
+                   "frequency"],
+               chosen_word["id"]
+               )
+    sql0 = """
+    update  AllEnglishKnowledge 
+    set score ={}+1 , frequency={}+1 
+    where id ={}
+    """.format(chosen_word["score"],
+               chosen_word[
+                   "frequency"],
+               chosen_word["id"])
+    sql2 = """
+    update  AllEnglishKnowledge 
+    set score ={}+1 , frequency={}+1,is_delete=1 
+    where id ={}
+    """.format(
+        chosen_word["score"],
+        chosen_word[
+            "frequency"],
+        chosen_word["id"])
     try:
         with engine.begin() as conn:
-            if score == "0":
+            if score == "1":
                 conn.execute(sqlalchemy.text(sql0))
+            elif score == "d":
+                conn.execute(sqlalchemy.text(sql2))
             else:
                 conn.execute(sqlalchemy.text(sql1))
+        # print(datetime.datetime.now(),"展示结束")
     except Exception as e:
-        print(e)
+        print("update 更新数据库失败了：",e)
     engine.dispose()
 
 
+# print(datetime.datetime.now(), "第一次加载")
+# 查出所有的记录
+results = engine.connect().exec_driver_sql(
+    """
+    select id, score
+    from AllEnglishKnowledge
+    where score = 100
+      and ABS(TIMESTAMPDIFF(minute, create_time, update_time)) <= 10
+      and table_name = 'sentence'
+      and is_delete = 0
+      """)
+# 将记录格式为字典
+data = [dict(zip(results.keys(), result)) for result in results]
+# 计算概率
+probabilities = [get_word_probability(word["score"]) for word in data]
+
 while 1:
     try:
-        chosen_word = choose_word()
-        # pronunciation()
-        # display()
+        # print(datetime.datetime.now(), "进入到while循环")
+        chosen_word = choose_word(data, probabilities)
         t1 = threading.Thread(target=pronunciation)
         t1.start()
 
@@ -177,7 +220,6 @@ while 1:
             os.remove("/Users/sarahyang/PycharmProjects/leetcode/English/temp.mp3")
             print("File deleted successfully.")
         print("\n")
-        # del t1
-        # del t2
+        # print(datetime.datetime.now(), "while结束")
     except Exception as e:
-        print("Error:", str(e))
+        print("while Error:", str(e))
