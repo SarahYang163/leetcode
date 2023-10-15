@@ -14,7 +14,7 @@ results = engine.connect().exec_driver_sql(sql_all_id_and_score)
 data = [dict(zip(results.keys(), result)) for result in results]
 # 计算概率
 probabilities = [get_word_probability(word["score"]) for word in data]
-# 以上步骤不用再每次循环中多次调用
+# 以上步骤不用在每次循环中多次调用
 while 1:
     try:
         # 调用选择函数

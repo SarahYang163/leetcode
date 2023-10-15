@@ -16,7 +16,7 @@ from English.EnglishLearnAndReview.constants import sql_update_delete, sql_updat
 def displayTranslator(context, soup_translateContent):
     try:
         for c in context:
-            elements = soup_translateContent.find(class_=c[0]).efind_all(class_=c[1])
+            elements = soup_translateContent.find(class_=c[0]).find_all(class_=c[1])
             for element in elements:
                 print(element.text)
     except Exception as e:
@@ -33,10 +33,9 @@ def get_word_probability(score):
 
 # 发音模块，调用dict接口实现
 def pronunciation(chosen_word):
-    response = requests.get(
-        'https://dict.youdao.com/dictvoice',
-        params={"type": 0, "audio": chosen_word["English"]}).content  # 替换为实际的音频请求地址
-
+    print(111111111111)
+    response = requests.get('https://dict.youdao.com/dictvoice',
+                            params={"type": 0, "audio": chosen_word["English"]}).content  # 替换为实际的音频请求地址
     # 保存音频文件到临时文件
     audio_file = "temp.mp3"  # 临时文件名
     with open(audio_file, 'wb') as f:
@@ -44,24 +43,23 @@ def pronunciation(chosen_word):
     time.sleep(0.05)
     # 初始化 pygame
     pygame.init()
-
     # 加载音频文件
     pygame.mixer.music.load(audio_file)
-
     # 播放音频
     pygame.mixer.music.play()
     time.sleep(0.5)
     # 等待音频播放完毕
     while pygame.mixer.music.get_busy():
         continue
-
     # 清除临时文件
     pygame.mixer.music.stop()
     pygame.quit()
+    print(222222222222)
 
 
 # 展示和交互模块
 def display(engine, chosen_word):
+    print(333333)
     score = input("答案正确请输入1，答案错误请输入0:")
     sql1 = sql_update_score_and_frequency.format(chosen_word["score"],
                                                  chosen_word["frequency"],
@@ -83,7 +81,9 @@ def display(engine, chosen_word):
                 conn.execute(sqlalchemy.text(sql1))
     except Exception as e:
         print("update 更新数据库失败了：", e)
-    engine.dispose()
+    finally:
+        engine.dispose()
+        print(4444444)
 
 
 def choose_word(engine, data, probabilities):
@@ -102,11 +102,9 @@ def choose_word(engine, data, probabilities):
         question = soup_translate_content.find(class_="word-exp").text
     # randomInt = random.randint(0, 1)
     answer = chosen_word["English"]
-    # print(datetime.datetime.now(),"任意键之前")
     print(chosen_word["id"], question)
     # if randomInt == 1 else answer)
     key = input("按下任意键继续...:")
-    # print(datetime.datetime.now(),"任意键之后")
 
     if key == "s":
         engine.dispose()
