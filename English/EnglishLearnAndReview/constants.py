@@ -20,12 +20,16 @@ sql_all_field = """
     where id ={} 
     """
 
-sql_update_score_and_frequency = """
+sql_update_score_and_frequency_minus = """
     update  AllEnglishKnowledge 
     set score ={}-1 , frequency={}+1 
     where id ={}
     """
-
+sql_update_score_and_frequency_add = """
+    update  AllEnglishKnowledge 
+    set score ={}+1 , frequency={}+1 
+    where id ={}
+    """
 sql_update_delete = """
     update  AllEnglishKnowledge 
     set score ={}+1 , frequency={}+1,is_delete=1 

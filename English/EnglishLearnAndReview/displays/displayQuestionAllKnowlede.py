@@ -20,10 +20,10 @@ while 1:
         # 调用选择函数
         chosen_word = choose_word(engine, data, probabilities)
         # 发音和展示用线程方式同步进行
-        t1 = threading.Thread(target=pronunciation(chosen_word))
+        t1 = threading.Thread(target=pronunciation, args=(chosen_word,))
         t1.start()
 
-        t2 = threading.Thread(target=display(engine, chosen_word))
+        t2 = threading.Thread(target=display, args=(engine, chosen_word))
         t2.start()
 
         t1.join()

@@ -8,8 +8,8 @@ import requests
 import sqlalchemy
 from bs4 import BeautifulSoup
 
-from English.EnglishLearnAndReview.constants import sql_update_delete, sql_update_score_and_frequency, sql_all_field, \
-    soup_context
+from English.EnglishLearnAndReview.constants import sql_update_delete, sql_all_field, \
+    soup_context, sql_update_score_and_frequency_minus, sql_update_score_and_frequency_add
 
 
 # 从context(html类型中)提取属性
@@ -33,7 +33,6 @@ def get_word_probability(score):
 
 # 发音模块，调用dict接口实现
 def pronunciation(chosen_word):
-    print(111111111111)
     response = requests.get('https://dict.youdao.com/dictvoice',
                             params={"type": 0, "audio": chosen_word["English"]}).content  # 替换为实际的音频请求地址
     # 保存音频文件到临时文件
@@ -54,20 +53,18 @@ def pronunciation(chosen_word):
     # 清除临时文件
     pygame.mixer.music.stop()
     pygame.quit()
-    print(222222222222)
 
 
 # 展示和交互模块
 def display(engine, chosen_word):
-    print(333333)
     score = input("答案正确请输入1，答案错误请输入0:")
-    sql1 = sql_update_score_and_frequency.format(chosen_word["score"],
-                                                 chosen_word["frequency"],
-                                                 chosen_word["id"]
-                                                 )
-    sql0 = sql_update_score_and_frequency.format(chosen_word["score"],
-                                                 chosen_word["frequency"],
-                                                 chosen_word["id"])
+    sql1 = sql_update_score_and_frequency_minus.format(chosen_word["score"],
+                                                       chosen_word["frequency"],
+                                                       chosen_word["id"]
+                                                       )
+    sql0 = sql_update_score_and_frequency_add.format(chosen_word["score"],
+                                                     chosen_word["frequency"],
+                                                     chosen_word["id"])
     sql2 = sql_update_delete.format(chosen_word["score"],
                                     chosen_word["frequency"],
                                     chosen_word["id"])
@@ -83,7 +80,6 @@ def display(engine, chosen_word):
         print("update 更新数据库失败了：", e)
     finally:
         engine.dispose()
-        print(4444444)
 
 
 def choose_word(engine, data, probabilities):
