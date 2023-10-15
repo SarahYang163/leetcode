@@ -1,4 +1,4 @@
-# https://leetcode.cn/problems/maximum-number-of-weeks-for-which-you-can-work/
+# https://leetcode.cn/p roblems/maximum-number-of-weeks-for-which-you-can-work/
 from typing import List
 from queue import PriorityQueue
 

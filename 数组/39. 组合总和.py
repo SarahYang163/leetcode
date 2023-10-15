@@ -27,7 +27,7 @@ class Solution:
         return self.res
 
     def combinationSum4(self, candidates: List[int], target: int) -> int:
-        #此dfs做法超时
+        # 此dfs做法超时
         # self.res = 0
         # candidates.sort()
         # def process(candidates: List[int], target: int, res_tmp: List):
@@ -49,18 +49,17 @@ class Solution:
         #         if candidate <= i:
         #             dp[i] += dp[i - candidate]
         # return dp[target]
-
-        #背包解决
-        dp = [0 for i in range(target + 1)]
-        dp[0] = 1
-        for i in range(target + 1):
-            for j in range(len(candidates) - 1, -1, -1):
-                if candidates[j] <= i:
-                    dp[i] += dp[i - candidates[j]]
-        print(dp)
+        # 背包解决
+        # 完全背包：外循环nums, 内循环target, target正序且target >= nums[i];
+        dp = [[] for _ in range(target + 1)]
+        dp[0] = [[]]
+        for candidate in candidates:
+            for i in range(candidate, target + 1, 1):
+                for a in dp[i - candidate]:
+                    dp[i].append([candidate] + a)
         return dp[target]
 
 
 if __name__ == '__main__':
     res = Solution()
-    print(res.combinationSum4([1, 2, 3], 3))
+    print(res.combinationSum([10,1,2,7,6,1,5], 8))

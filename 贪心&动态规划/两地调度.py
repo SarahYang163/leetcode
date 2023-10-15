@@ -29,9 +29,9 @@ class Solution:
 
 
 if __name__ == '__main__':
-    # res = Solution()
-    # print(res.twoCitySchedCost(
-    #     [[515, 563], [451, 713], [537, 709], [343, 819], [855, 779], [457, 60], [650, 359], [631, 42]]))
+    res = Solution()
+    print(res.twoCitySchedCost(
+        [[515, 563], [451, 713], [537, 709], [343, 819], [855, 779], [457, 60], [650, 359], [631, 42]]))
     # array = [4, 5, 2, 4, 7, 32, 1]
     # x = sorted(array)
     # print(array)

@@ -16,5 +16,23 @@ def transportationHub(path: List[List[int]]) -> int:
     return -1
 
 
+def transportationHub1(path: List[List[int]]) -> int:
+    map_ = {}
+    for p in path:
+        if p[0] not in map_:
+            map_[p[0]] = [1, 0]
+        else:
+            map_[p[0]][0] += 1
+        if p[1] not in map_:
+            map_[p[1]] = [0, 1]
+        else:
+            map_[p[1]][1] += 1
+    for m in map_.items():
+        if m[1][0] == 0 and m[1][1] == len(map_) - 1:
+            return m[0]
+    return -1
+
+
 if __name__ == '__main__':
-    print(transportationHub([[0, 1], [0, 3], [1, 3], [2, 0], [2, 3]]))
+    m = {1: 1}
+    print(transportationHub1([[0, 3], [1, 3], [2, 0], [2, 3]]))

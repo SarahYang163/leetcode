@@ -13,8 +13,7 @@ class Solution:
         helpMap["7"] = ["p", "q", "r", "s"]
         helpMap["8"] = ["t", "u", "v"]
         helpMap["9"] = ["w", "x", "y", "z"]
-
-        n = len(num)
+        n=len(num)
         for word in words:
             flag = True
             if len(word) == n:
@@ -28,7 +27,6 @@ class Solution:
                 res.append(word)
         return res
 
-
 if __name__ == '__main__':
     res = Solution()
-    print(res.getValidT9Words("2233", ["abee", "usedy", "aafe"]))
+    print(res.getValidT9Words("2233", ["abee", "usedy", "aafe", "aaze"]))

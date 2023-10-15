@@ -4,7 +4,7 @@ from typing import List
 
 def printallsub(s: str, i: int, res: str) -> str:
     if i == len(s):
-        print(res)
+        print("dfghj"+res)
         return
     printallsub(s, i + 1, res + s[i])
     printallsub(s, i + 1, res)

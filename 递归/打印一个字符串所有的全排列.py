@@ -7,14 +7,14 @@ class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
 
 
-        # def backtrack(nums, tmp):
-        #     if not nums:
-        #         self.res.append(tmp)
-        #         return
-        #     for i in range(len(nums)):
-        #         backtrack(nums[:i] + nums[i + 1:], tmp + [nums[i]])
-        #
-        # backtrack(nums, [])
+        def backtrack(nums, tmp):
+            if not nums:
+                self.res.append(tmp)
+                return
+            for i in range(len(nums)):
+                backtrack(nums[:i] + nums[i + 1:], tmp + [nums[i]])
+
+        backtrack(nums, [])
         return self.res
 
 

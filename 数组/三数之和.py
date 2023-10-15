@@ -29,9 +29,13 @@ class Solution:
                     res.append([nums[i], nums[j], nums[map.get(target - nums[j])]])
                 else:
                     map[nums[j]] = j
+        print(res)
         return [list(i) for i in set(tuple(_) for _ in res)]
+
+        # print(set(res))
+        # return [list(i) for i in set(tuple(_) for _ in res)]
 
 
 if __name__ == '__main__':
     res = Solution()
-    print(res.threeSum1([1, 0, -1, 2, -1, -4]))
+    print(res.threeSum1([1, 0, 0, -2, -1, 2, -1, 3]))

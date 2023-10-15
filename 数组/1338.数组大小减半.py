@@ -8,7 +8,7 @@ from typing import List
 
 
 class Solution:
-    # 忘了用计算器了呜呜呜，还在傻傻的用map
+    # 忘了用计数器了呜呜呜，还在傻傻的用map
     def minSetSize(self, arr: List[int]) -> int:
         map_ = {}
         for a in arr:
@@ -27,14 +27,19 @@ class Solution:
             res += 1
         return res
 
-    # 计数器做法
-    class demo:
-        def minSetSize(self, arr: List[int]) -> int:
-            freq = collections.Counter(arr)
-            cnt, ans = 0, 0
-            for num, occ in freq.most_common():
-                cnt += occ
-                ans += 1
-                if cnt * 2 >= len(arr):
-                    break
-            return ans
+        # 计数器做法
+
+    def minSetSize1(self, arr: List[int]) -> int:
+        freq = collections.Counter(arr)
+        cnt, ans = 0, 0
+        for num, occ in freq.most_common():
+            cnt += occ
+            ans += 1
+            if cnt * 2 >= len(arr):
+                break
+        return ans
+
+
+if __name__ == '__main__':
+    res = Solution()
+    print(res.minSetSize1([3, 3, 3, 3, 5, 5, 5, 2, 2, 7]))

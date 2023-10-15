@@ -1,0 +1,30 @@
+# 时间之类的函数
+# SELECT
+# 	SId,
+# 	Sname,
+# 	YEAR(NOW()) - YEAR(Sage) - IF(DAYOFYEAR(NOW()) < DAYOFYEAR(Sage), 1, 0) AS age
+# FROM
+# 	Student
+
+
+# 排名
+# ROW_NUMBER() OVER (ORDER BY score DESC) -> 重分顺序排名
+# RANK() OVER (PARTITION BY CId ORDER BY score DESC) -> 重分排名相同，接下来的排名不连续
+# DENSE_RANK() OVER (PARTITION BY CId ORDER BY score DESC) -> 重分排名相同，接下来的排名连续
+
+
+# if条件语句
+# count(IF(条件，结果是，结果否))
+# SELECT
+# 	CId,
+# 	MAX(score),
+# 	MIN(score),
+# 	AVG(score),
+# 	COUNT(IF(score >= 60, 1, NULL)) / COUNT(1) * 100 AS pass_ratio,
+# 	COUNT(IF(score >= 70 AND score < 80, 1, NULL)) / COUNT(1) * 100 AS midium_ratio,
+# 	COUNT(IF(score >= 80 AND score < 90, 1, NULL)) / COUNT(1) * 100 AS better_ratio,
+# 	COUNT(IF(score >= 90, 1, NULL)) / COUNT(1) * 100 AS best_ratio
+# FROM
+# 	SC
+# GROUP BY
+# 	SC.CId
