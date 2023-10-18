@@ -15,7 +15,10 @@ data = [dict(zip(results.keys(), result)) for result in results]
 # 计算概率
 probabilities = [get_word_probability(word["score"]) for word in data]
 # 以上步骤不用在每次循环中多次调用
+count = 0
 while 1:
+    count += 1
+    print(count)
     try:
         # 调用选择函数
         chosen_word = choose_word(engine, data, probabilities)

@@ -91,11 +91,16 @@ def choose_word(engine, data, probabilities):
     if chosen_word["table_name"] == "sentence":
         question = chosen_word["Chinese"]
     else:
-        # Chinese meaning by translator api
-        soup_translate_content = BeautifulSoup(
-            requests.get("https://dict.youdao.com/result", params={"word": chosen_word["English"], "lang": "en"}).text,
-            'lxml')
-        question = soup_translate_content.find(class_="word-exp").text
+        try:
+            # Chinese meaning by translator api
+            soup_translate_content = BeautifulSoup(
+                requests.get("https://dict.youdao.com/result",
+                             params={"word": chosen_word["English"], "lang": "en"}).text, 'lxml')
+            # soup_translate_content.find(class_="catalogue_paraphrasing").find_all("p")找到第一个网络释义
+            question = soup_translate_content.find(class_="catalogue_tabs catalogue_author").find(class_="trans").text
+        except Exception as e:
+            question = chosen_word["Chinese"]
+            print("choose_word Error:", str(e))
     # randomInt = random.randint(0, 1)
     answer = chosen_word["English"]
     print(chosen_word["id"], question)

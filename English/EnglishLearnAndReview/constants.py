@@ -12,7 +12,7 @@ mysql_setting = {
 }
 
 # soup_context = [["basic", "word-exp"], ["webPhrase", "mcols-layout"], ["blng_sents_part dict-module", "mcols-layout"]]
-soup_context = [["phone_con", "phonetic"]]
+soup_context = [["basic", "word-exp"], ["phone_con", "phonetic"]]
 # 查询出所有需要的字段
 sql_all_field = """
     select English, Chinese, score, id, frequency, table_name
@@ -39,8 +39,5 @@ sql_update_delete = """
 sql_all_id_and_score = """
     select id, score
     from AllEnglishKnowledge
-    where score = 100
-      and ABS(TIMESTAMPDIFF(minute, create_time, update_time)) <= 10
-      and table_name != 'sentence'
-      and is_delete = 0
+    where  is_delete = 0
       """
