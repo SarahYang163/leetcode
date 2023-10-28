@@ -13,9 +13,9 @@ mysql_setting = {
 }
 # Everytime running this program need to change "table_name" and "path"
 # 表名,如果不存在表，则自动创建
-table_name = 'English'
+table_name = 'ces'
 # 文件路径
-path = r'/Users/sarahyang/Desktop/5500Words.csv'
+path = r'/Users/sarahyang/Desktop/ces.csv'
 
 data = pd.read_csv(path, encoding='utf-8')
 engine = create_engine("mysql+pymysql://{user}:{passwd}@{host}:{port}/{db}".format(**mysql_setting), max_overflow=5)

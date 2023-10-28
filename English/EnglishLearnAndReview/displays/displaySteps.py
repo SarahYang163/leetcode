@@ -9,7 +9,8 @@ import sqlalchemy
 from bs4 import BeautifulSoup
 
 from English.EnglishLearnAndReview.constants import sql_update_delete, sql_all_field, \
-    soup_context, sql_update_score_and_frequency_minus, sql_update_score_and_frequency_add
+    soup_context, sql_update_score_and_frequency_minus, sql_update_score_and_frequency_add, sql_update_delete_unused, \
+    sql_update_important, sql_update_unimportant
 
 
 # 从context(html类型中)提取属性
@@ -33,6 +34,8 @@ def get_word_probability(score):
 
 # 发音模块，调用dict接口实现
 def pronunciation(chosen_word):
+    if chosen_word["table_name"] == 'sentence' or chosen_word["table_name"] == 'simple-sentence':
+        return
     response = requests.get('https://dict.youdao.com/dictvoice',
                             params={"type": 0, "audio": chosen_word["English"]}).content  # 替换为实际的音频请求地址
     # 保存音频文件到临时文件
@@ -68,12 +71,27 @@ def display(engine, chosen_word):
     sql2 = sql_update_delete.format(chosen_word["score"],
                                     chosen_word["frequency"],
                                     chosen_word["id"])
+    sql3 = sql_update_delete_unused.format(chosen_word["score"],
+                                           chosen_word["frequency"],
+                                           chosen_word["id"])
+    sql4 = sql_update_important.format(chosen_word["score"],
+                                       chosen_word["frequency"],
+                                       chosen_word["id"])
+    sql5 = sql_update_unimportant.format(chosen_word["score"],
+                                         chosen_word["frequency"],
+                                         chosen_word["id"])
     try:
         with engine.begin() as conn:
             if score == "1":
                 conn.execute(sqlalchemy.text(sql0))
             elif score == "d":
                 conn.execute(sqlalchemy.text(sql2))
+            elif score == 'u':
+                conn.execute(sqlalchemy.text(sql3))
+            elif score == '-':
+                conn.execute(sqlalchemy.text(sql4))
+            elif score == '=':
+                conn.execute(sqlalchemy.text(sql5))
             else:
                 conn.execute(sqlalchemy.text(sql1))
     except Exception as e:
@@ -88,7 +106,7 @@ def choose_word(engine, data, probabilities):
     chosen_word_id = random.choices(data, probabilities)[0]["id"]
     chosen_words = engine.connect().exec_driver_sql(sql_all_field.format(chosen_word_id))
     chosen_word = [dict(zip(chosen_words.keys(), chosen_word)) for chosen_word in chosen_words][0]
-    if chosen_word["table_name"] == "sentence":
+    if chosen_word["table_name"] == "sentence" or chosen_word["table_name"] == "simple-sentence":
         question = chosen_word["Chinese"]
     else:
         try:
@@ -96,8 +114,11 @@ def choose_word(engine, data, probabilities):
             soup_translate_content = BeautifulSoup(
                 requests.get("https://dict.youdao.com/result",
                              params={"word": chosen_word["English"], "lang": "en"}).text, 'lxml')
-            # soup_translate_content.find(class_="catalogue_paraphrasing").find_all("p")找到第一个网络释义
-            question = soup_translate_content.find(class_="catalogue_tabs catalogue_author").find(class_="trans").text
+            # 使用选择器定位到所有 col2 下除了 secondaryFont 属性的子元素 p
+            target_ps = soup_translate_content.find(class_="trans-list").select('div.col2 > p:not(.secondaryFont)')
+            print(soup_translate_content.find(class_="catalogue_tabs catalogue_author").find(class_="trans").text)
+            # 提取每个标签的文本内容
+            question = [p.get_text(strip=True) for p in target_ps]
         except Exception as e:
             question = chosen_word["Chinese"]
             print("choose_word Error:", str(e))
@@ -110,8 +131,8 @@ def choose_word(engine, data, probabilities):
     if key == "s":
         engine.dispose()
         sys.exit()
-    print("答案：", answer)
+    print("答案：", answer if randomInt == 1 else question)
     # if randomInt == 1 else question)
-    if chosen_word["table_name"] != "sentence":
+    if chosen_word["table_name"] != "sentence" and chosen_word["table_name"] != "simple-sentence":
         displayTranslator(soup_context, soup_translate_content)
     return chosen_word

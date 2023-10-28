@@ -60,10 +60,29 @@ class Solution:
         return dp[M][N]
 
 
-    # print(test(nums, target))
+# a=[2,3,1,5,3]
+# b=[6,2,4,6,7]
+    def test1(self,arr1: list, arr2: list) -> list:
+        # 解法一：
+        arr = sorted(arr1 + arr2)
+        return arr
+
+
+    def test2(self,arr1: list, arr2: list) -> list:
+        def quicksort(arr):
+            if len(arr) <= 1:
+                return arr
+            pivot = arr[len(arr) // 2]
+            left = [x for x in arr if x < pivot]
+            middle = [x for x in arr if x == pivot]
+            right = [x for x in arr if x > pivot]
+            return quicksort(left) + middle + quicksort(right)
+
+        return quicksort(arr1 + arr2)
 
 
 if __name__ == '__main__':
     res = Solution()
-    # print(res.maxOperations([3, 1, 2, 4, 3], 5))
-    print(res.longestCommonSubsequence( "shmtulqrypy","oxcpqrsvwf"))
+    a = [2, 3, 1, 5, 3]
+    b = [6, 2, 4, 6, 7]
+    print(res.test2(a, b))
