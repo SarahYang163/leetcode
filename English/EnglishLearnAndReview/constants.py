@@ -12,7 +12,7 @@ mysql_setting = {
 }
 
 # soup_context = [["basic", "word-exp"], ["webPhrase", "mcols-layout"], ["blng_sents_part dict-module", "mcols-layout"]]
-soup_context = [["basic", "word-exp"], ["webPhrase", "mcols-layout"], ["blng_sents_part dict-module", "mcols-layout"],
+soup_context = [["basic", "word-exp"], ["blng_sents_part dict-module", "mcols-layout"],
                 ["phone_con", "phonetic"]]
 # 查询出所有需要的字段
 sql_all_field = """
@@ -29,6 +29,11 @@ sql_update_score_and_frequency_minus = """
 sql_update_score_and_frequency_add = """
     update  AllEnglishKnowledge 
     set score ={}+1 , frequency={}+1 
+    where id ={}
+    """
+sql_update_score_and_frequency_add2 = """
+    update  AllEnglishKnowledge 
+    set score ={}+2 , frequency={}+1 
     where id ={}
     """
 sql_update_delete = """
@@ -58,15 +63,19 @@ sql_all_id_and_score = """
     and unused=0
     and table_name !='simple-sentence'
     and table_name !='sentence'
-    # and score>100
-    and score <101
-    order by rand()
-    limit 1000
-    offset 2000
+    # and score>=98
+    and score <100
+    order by English
     """
 sql_itls = """
     select id,question,answers
     from ieltsCentense
-    order by rand(id)
-    limit 10
+    order by rand()
+    """
+# record an issue:
+# Because there is like "I don't like banana." in my English sentence,if I use '{}',it will return error.
+# Using "{}" is ok
+sql_YDSentence_insert = """
+    INSERT ignore INTO `YDSentence` (`English`, `Chinese`)
+    VALUES ("{}","{}");
     """
